@@ -24,7 +24,6 @@
           </view>
         </view>
       </view>
-
     </view>
   </view>
 </template>
@@ -86,7 +85,7 @@
     height: 360rpx;
     overflow: hidden;
     position: relative;
-    background-color: #ccc;
+    background-color: #CCC;
   }
 
   .banner-img {
@@ -138,10 +137,10 @@
     bottom: 0;
     left: 0;
     width: 750rpx;
-    background: #fff;
+    background: #FFF;
     box-shadow: 20rpx 10rpx 20rpx #2F85FC;
     border-top: 2rpx solid #E6E6E6;
-    color: #fff;
+    color: #FFF;
   }
 
   .footer {
@@ -162,7 +161,7 @@
     font-size: 28rpx;
     color: #333;
   }
-  
+
   .icons {
     width: 400rpx;
     height: 70rpx;
@@ -170,13 +169,16 @@
     flex-direction: row;
     justify-content: space-around;
     align-items: center;
+
     .icon {
       display: flex;
       align-items: center;
     }
+
     .text {
       color: #000;
     }
+
     .vt {
       margin-right: 4rpx;
       font-size: 48rpx;

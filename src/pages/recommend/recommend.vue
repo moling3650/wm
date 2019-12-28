@@ -117,6 +117,7 @@
     }
   }
 </script>
+
 <style lang="scss" scoped>
   /* #ifndef APP-PLUS */
   page {

@@ -39,10 +39,10 @@
     },
     methods: {
       click() {
-        this.$emit('click');
+        this.$emit('click')
       },
       close(e) {
-        this.$emit('close');
+        this.$emit('close')
       },
       _someLove(options) {
         this.$emit('someLove', options)

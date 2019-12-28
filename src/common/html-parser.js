@@ -79,23 +79,31 @@
  *
  */
 // Regular Expressions for parsing tags and attributes
-var startTag = /^<([-A-Za-z0-9_]+)((?:\s+[a-zA-Z_:][-a-zA-Z0-9_:.]*(?:\s*=\s*(?:(?:"[^"]*")|(?:'[^']*')|[^>\s]+))?)*)\s*(\/?)>/;
+var startTag =
+  /^<([-A-Za-z0-9_]+)((?:\s+[a-zA-Z_:][-a-zA-Z0-9_:.]*(?:\s*=\s*(?:(?:"[^"]*")|(?:'[^']*')|[^>\s]+))?)*)\s*(\/?)>/;
 var endTag = /^<\/([-A-Za-z0-9_]+)[^>]*>/;
 var attr = /([a-zA-Z_:][-a-zA-Z0-9_:.]*)(?:\s*=\s*(?:(?:"((?:\\.|[^"])*)")|(?:'((?:\\.|[^'])*)')|([^>\s]+)))?/g; // Empty Elements - HTML 5
 
-var empty = makeMap('area,base,basefont,br,col,frame,hr,img,input,link,meta,param,embed,command,keygen,source,track,wbr'); // Block Elements - HTML 5
+var empty = makeMap(
+  'area,base,basefont,br,col,frame,hr,img,input,link,meta,param,embed,command,keygen,source,track,wbr'); // Block Elements - HTML 5
 // fixed by xxx 将 ins 标签从块级名单中移除
 
-var block = makeMap('a,address,article,applet,aside,audio,blockquote,button,canvas,center,dd,del,dir,div,dl,dt,fieldset,figcaption,figure,footer,form,frameset,h1,h2,h3,h4,h5,h6,header,hgroup,hr,iframe,isindex,li,map,menu,noframes,noscript,object,ol,output,p,pre,section,script,table,tbody,td,tfoot,th,thead,tr,ul,video'); // Inline Elements - HTML 5
+var block = makeMap(
+  'a,address,article,applet,aside,audio,blockquote,button,canvas,center,dd,del,dir,div,dl,dt,fieldset,figcaption,figure,footer,form,frameset,h1,h2,h3,h4,h5,h6,header,hgroup,hr,iframe,isindex,li,map,menu,noframes,noscript,object,ol,output,p,pre,section,script,table,tbody,td,tfoot,th,thead,tr,ul,video'
+); // Inline Elements - HTML 5
 
-var inline = makeMap('abbr,acronym,applet,b,basefont,bdo,big,br,button,cite,code,del,dfn,em,font,i,iframe,img,input,ins,kbd,label,map,object,q,s,samp,script,select,small,span,strike,strong,sub,sup,textarea,tt,u,var'); // Elements that you can, intentionally, leave open
+var inline = makeMap(
+  'abbr,acronym,applet,b,basefont,bdo,big,br,button,cite,code,del,dfn,em,font,i,iframe,img,input,ins,kbd,label,map,object,q,s,samp,script,select,small,span,strike,strong,sub,sup,textarea,tt,u,var'
+); // Elements that you can, intentionally, leave open
 // (and which close themselves)
 
 var closeSelf = makeMap('colgroup,dd,dt,li,options,p,td,tfoot,th,thead,tr'); // Attributes that have their values filled in disabled="disabled"
 
-var fillAttrs = makeMap('checked,compact,declare,defer,disabled,ismap,multiple,nohref,noresize,noshade,nowrap,readonly,selected'); // Special Elements (can contain anything)
+var fillAttrs = makeMap(
+  'checked,compact,declare,defer,disabled,ismap,multiple,nohref,noresize,noshade,nowrap,readonly,selected'); // Special Elements (can contain anything)
 
 var special = makeMap('script,style');
+
 function HTMLParser(html, handler) {
   var index;
   var chars;
@@ -103,7 +111,7 @@ function HTMLParser(html, handler) {
   var stack = [];
   var last = html;
 
-  stack.last = function () {
+  stack.last = function() {
     return this[this.length - 1];
   };
 
@@ -153,7 +161,7 @@ function HTMLParser(html, handler) {
         }
       }
     } else {
-      html = html.replace(new RegExp('([\\s\\S]*?)<\/' + stack.last() + '[^>]*>'), function (all, text) {
+      html = html.replace(new RegExp('([\\s\\S]*?)<\/' + stack.last() + '[^>]*>'), function(all, text) {
         text = text.replace(/<!--([\s\S]*?)-->|<!\[CDATA\[([\s\S]*?)]]>/g, '$1$2');
 
         if (handler.chars) {
@@ -196,8 +204,9 @@ function HTMLParser(html, handler) {
 
     if (handler.start) {
       var attrs = [];
-      rest.replace(attr, function (match, name) {
-        var value = arguments[2] ? arguments[2] : arguments[3] ? arguments[3] : arguments[4] ? arguments[4] : fillAttrs[name] ? name : '';
+      rest.replace(attr, function(match, name) {
+        var value = arguments[2] ? arguments[2] : arguments[3] ? arguments[3] : arguments[4] ? arguments[4] :
+          fillAttrs[name] ? name : '';
         attrs.push({
           name: name,
           value: value,
@@ -218,12 +227,12 @@ function HTMLParser(html, handler) {
       var pos = 0;
     } // Find the closest opened tag of the same type
     else {
-        for (var pos = stack.length - 1; pos >= 0; pos--) {
-          if (stack[pos] == tagName) {
-            break;
-          }
+      for (var pos = stack.length - 1; pos >= 0; pos--) {
+        if (stack[pos] == tagName) {
+          break;
         }
       }
+    }
 
     if (pos >= 0) {
       // Close all the open elements, up the stack
@@ -255,14 +264,14 @@ function removeDOCTYPE(html) {
 }
 
 function parseAttrs(attrs) {
-  return attrs.reduce(function (pre, attr) {
+  return attrs.reduce(function(pre, attr) {
     var value = attr.value;
     var name = attr.name;
 
     if (pre[name]) {
-			pre[name] = pre[name] + " " + value;
+      pre[name] = pre[name] + " " + value;
     } else {
-			pre[name] = value;
+      pre[name] = value;
     }
 
     return pre;
