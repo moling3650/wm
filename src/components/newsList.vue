@@ -45,20 +45,15 @@
         this.pageIndex = pageIndex
         uni.showNavigationBarLoading()
 
-        this.$api.getNews(this.params).then(({
-          code,
-          data
-        }) => {
-          if (code === 200) {
-            uni.hideNavigationBarLoading()
-            if (data == null) {
-              return
-            } else if (pageIndex === 1) {
-              uni.stopPullDownRefresh()
-              this.dataList = data.items
-            } else {
-              this.dataList = this.dataList.concat(data.items)
-            }
+        this.$api.getNews(this.params).then(data => {
+          uni.hideNavigationBarLoading()
+          if (data == null) {
+            return
+          } else if (pageIndex === 1) {
+            uni.stopPullDownRefresh()
+            this.dataList = data.items
+          } else {
+            this.dataList = this.dataList.concat(data.items)
           }
         })
       },

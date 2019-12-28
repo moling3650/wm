@@ -18,7 +18,7 @@ const request = (method, url, data) => {
     }
   }).then(([_, res]) => {
     if (res && res.data && res.data.code === 200) {
-      return res.data
+      return res.data.data
     } else {
       uni.showToast({
         title: res.data.msg,

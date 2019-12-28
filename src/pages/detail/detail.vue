@@ -58,22 +58,17 @@
     },
     methods: {
       getDetail(id) {
-        this.$api.getNewsById(id).then(({
-          code,
-          data
-        }) => {
-          if (code === 200) {
-            // #ifdef MP-ALIPAY
-            this.content = htmlParser(data.news.content)
-            // #endif
-            // #ifndef MP-ALIPAY
-            this.content = data.news.content
-            // #endif
-            this.news = data.news
-            this.content = data.news.content
-          } else {
-            this.content = FAIL_CONTENT
-          }
+        this.$api.getNewsById(id).then(data => {
+          // #ifdef MP-ALIPAY
+          this.content = htmlParser(data.news.content)
+          // #endif
+          // #ifndef MP-ALIPAY
+          this.content = data.news.content
+          // #endif
+          this.news = data.news
+          this.content = data.news.content
+        }).catch(err => {
+          this.content = FAIL_CONTENT
         })
       }
     }
