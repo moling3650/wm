@@ -1,36 +1,39 @@
 import url_config from './config.js'
 
+const errerCodeMap = {
+  402: '没有登录或Token过期',
+  403: '没有权限',
+  404: '没有定义，或是资源没有被找到',
+  500: '代码异常'
+}
+
 const request = (url, method, data) => {
-
-  let codeNum = [401, 403, 1]
-
-  const headers = {
-    'content-type': 'application/json',
-    'x-api-token': uni.getStorageSync('token') || ''
-  }
   return uni.request({
     url: url_config + url,
     method,
     data,
-    header: headers
-  }).then(res => {
-    if (res[1].data && res[1].data.code === 200) {
-      return res[1].data
+    header: {
+      'content-type': 'application/json;charset=UTF-8',
+      'x-api-token': uni.getStorageSync('token') || ''
+    }
+  }).then(([_, res]) => {
+    if (res && res.data && res.data.code === 200) {
+      return res.data
     } else {
       uni.showToast({
-        title: res[1].data.msg,
+        title: res.data.msg,
         icon: 'none'
-      });
+      })
     }
   }).catch(error => {
-    if (!codeNum.indexOf(error.code)) {
+    if (!errerCodeMap[error.code]) {
       uni.clearStorageSync()
     } else {
-      console.log(error.code, 'error')
+      console.error(errerCodeMap[error.code])
       uni.showToast({
         title: error.msg,
         icon: 'none'
-      });
+      })
       return Promise.reject()
     }
   })
