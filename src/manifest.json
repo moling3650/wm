@@ -87,6 +87,20 @@
     "router": {
       "base": "/demo/news/website/"
     },
-    "template": "h5.template.html"
+    "template": "h5.template.html",
+    "devServer": {
+      "port": 8080,
+      "disableHostCheck": true,
+      "proxy": {
+        "/api": {
+          "target": "http://47.92.163.70:83",
+          "changeOrigin": true,
+          "secure": false,
+          "pathRewrite": {
+            "^/api": ""
+          }
+        }
+      }
+    }
   }
 }
