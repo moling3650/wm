@@ -1,25 +1,27 @@
 <template>
-  <view>
-    <view class="banner">
-      <image class="banner-img" :src="newList.coverUrl"></image>
+  <view id="Detail">
+    <view class="main">
+      <image class="banner" :src="news.coverUrl" mode="widthFix" />
+      <view class="article">
+        <view class="title fs14 color33"> {{ news.title }}</view>
+        <rich-text :nodes="content" />
+      </view>
     </view>
-    <view class="article-content">
-      <rich-text :nodes="content"></rich-text>
-    </view>
+
     <view class="comment-wrap">
       <view class="footer">
         <input v-model="word" type="text" class="uni-input" placeholder="评论一下吧">
         <view class="icons">
           <view class="icon">
-            <text class="iconfont vt wm-iconaixin1"></text>
+            <text class="iconfont wm-iconaixin1"></text>
             <text class="text">4.1w</text>
           </view>
           <view class="icon">
-            <text class="iconfont vt wm-iconaixin1"></text>
+            <text class="iconfont wm-iconaixin1"></text>
             <text class="text">4.1w</text>
           </view>
           <view class="icon">
-            <text class="iconfont vt wm-iconaixin1"></text>
+            <text class="iconfont wm-iconaixin1"></text>
             <text class="text">1.7w</text>
           </view>
         </view>
@@ -32,11 +34,13 @@
   // #ifdef MP-ALIPAY
   import htmlParser from '@/common/html-parser'
   // #endif
-  const FAIL_CONTENT = '<p>获取信息失败</p>';
+  const FAIL_CONTENT = '<p>获取信息失败</p>'
+
   export default {
+    name: 'Detail',
     data() {
       return {
-        newList: {},
+        news: {},
         word: '',
         coverUrl: '',
         content: ''
@@ -44,36 +48,32 @@
     },
     onShareAppMessage() {
       return {
-        title: this.banner.title,
-        path: '/pages/detail/detail?query=' + JSON.stringify(this.banner)
+        title: this.news.title,
+        path: `/pages/detail/detail?id=${this.news.id}`
       }
     },
-    onLoad(option) {
+    onLoad(query) {
       // 目前在某些平台参数会被主动 decode，暂时这样处理。
-      const id = option.query
-      // console.log(id, 'iididd---', option)
-      this.getDetail(id);
+      this.getDetail(query.id)
     },
     methods: {
       getDetail(id) {
-        this.$api.getNewsById('/news/' + id, {}).then(res => {
-          const {
-            code,
-            data
-          } = res || {}
+        this.$api.getNewsById(id).then(({
+          code,
+          data
+        }) => {
           if (code === 200) {
             // #ifdef MP-ALIPAY
-            this.content = htmlParser(data.news.content);
+            this.content = htmlParser(data.news.content)
             // #endif
             // #ifndef MP-ALIPAY
-            this.content = data.news.content;
+            this.content = data.news.content
             // #endif
-            this.newList = data.news;
-            this.content = data.news.content;
+            this.news = data.news
+            this.content = data.news.content
           } else {
-            this.content = FAIL_CONTENT;
+            this.content = FAIL_CONTENT
           }
-          console.log(res, 'detail')
         })
       }
     }
@@ -81,55 +81,34 @@
 </script>
 
 <style scoped lang="scss">
-  .banner {
-    height: 360rpx;
-    overflow: hidden;
-    position: relative;
-    background-color: #CCC;
-  }
-
-  .banner-img {
-    width: 100%;
-  }
-
-  .banner-title {
-    max-height: 84rpx;
-    overflow: hidden;
+  #Detail {
     position: absolute;
-    left: 30rpx;
-    bottom: 30rpx;
-    width: 90%;
-    font-size: 32rpx;
-    font-weight: 400;
-    line-height: 42rpx;
-    color: white;
-    z-index: 11;
-  }
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    font-family: PingFangSC-Regular;
 
-  .article-meta {
-    padding: 20rpx 40rpx;
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    color: gray;
-  }
+    .main {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 100rpx;
+      left: 0;
+      overflow: scroll;
+    }
 
-  .article-text {
-    font-size: 26rpx;
-    line-height: 50rpx;
-    margin: 0 20rpx;
-  }
+    .banner {
+      width: 750rpx;
+    }
 
-  .article-author,
-  .article-time {
-    font-size: 30rpx;
-  }
+    .article {
+      margin: 14rpx 36rpx;
 
-  .article-content {
-    margin: 20rpx 20rpx 120rpx;
-    overflow: hidden;
-    font-size: 30rpx;
-    margin-bottom: 30rpx;
+      .title {
+        margin-bottom: 28rpx;
+      }
+    }
   }
 
   .comment-wrap {
@@ -139,7 +118,7 @@
     width: 750rpx;
     background: #FFF;
     box-shadow: 20rpx 10rpx 20rpx #2F85FC;
-    border-top: 2rpx solid #E6E6E6;
+    border-top: 2rpx solid #E6;
     color: #FFF;
   }
 
@@ -156,7 +135,7 @@
     width: 300rpx;
     height: 70rpx;
     padding: 0 40rpx;
-    border: 2rpx solid #E6E6E6;
+    border: 2rpx solid #E6;
     border-radius: 10rpx;
     font-size: 28rpx;
     color: #333;
@@ -179,7 +158,7 @@
       color: #000;
     }
 
-    .vt {
+    .iconfont {
       margin-right: 4rpx;
       font-size: 48rpx;
       color: #000;

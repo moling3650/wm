@@ -86,3 +86,10 @@
 .bg-color-f5 {
   background: #F5F5F5;
 }
+
+#Detail .article img {
+  width: 100%;
+}
+#Detail .article p {
+  font-size: 24rpx;
+}
