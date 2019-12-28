@@ -21,8 +21,9 @@ const behaviorList = [
   'vote' // 投票
 ]
 behaviorList.forEach(behavior => {
-  api[`save${behavior}`] = params => request('POST', `/save/${behavior}`, params) // 提交用户行为
-  api[`query${behavior}`] = params => request('POST', `/my/${behavior}`, params) // 查询用户行为
+  const key = behavior.charAt(0).toUpperCase() + behavior.slice(1)
+  api[`save${key}`] = params => request('POST', `/save/${behavior}`, params) // 提交用户行为
+  api[`query${key}`] = params => request('POST', `/my/${behavior}`, params) // 查询用户行为
 })
 
 export default api
