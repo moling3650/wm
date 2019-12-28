@@ -63,10 +63,12 @@
         })
       },
 
+      // 第一次获取文章
       getNews() {
         this._fetchNews(1)
       },
 
+      // 获取更多文章
       getMoreNews() {
         this._fetchNews(this.pageIndex + 1)
       },
