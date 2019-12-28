@@ -7,7 +7,7 @@ const errerCodeMap = {
   500: '代码异常'
 }
 
-const request = (url, method, data) => {
+const request = (method, url, data) => {
   return uni.request({
     url: url_config + url,
     method,
