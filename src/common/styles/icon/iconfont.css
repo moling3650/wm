@@ -1,0 +1,65 @@
+@font-face {
+  font-family: "iconfont";
+  src: url('~@/static/iconfont/iconfont.ttf');
+
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.wm-iconxin:before {
+  content: "\e6b3";
+}
+
+.wm-iconxiangshangzhanhang:before {
+  content: "\ec0b";
+}
+
+.wm-iconheart:before {
+  content: "\e7df";
+}
+
+.wm-iconright:before {
+  content: "\e7eb";
+}
+
+.wm-iconleft:before {
+  content: "\e7ec";
+}
+
+.wm-iconheart-fill:before {
+  content: "\e849";
+}
+
+.wm-iconeye-fill:before {
+  content: "\e869";
+}
+
+.wm-iconQQ:before {
+  content: "\e882";
+}
+
+.wm-iconwechat-fill:before {
+  content: "\e883";
+}
+
+.wm-iconweibo-circle-fill:before {
+  content: "\e88a";
+}
+
+.wm-icondianzan:before {
+  content: "\ec7f";
+}
+
+.wm-iconaixin1:before {
+  content: "\e85c";
+}
+
+.wm-iconsousuo:before {
+  content: "\e6db";
+}
