@@ -1,21 +1,19 @@
 <template>
-  <view class="view border" v-if="options.title" @click="click">
+  <view class="view border" v-if="item.title" @click="click">
     <view>
-      <image class="image" v-if="options.coverUrl" :src="options.coverUrl"></image>
-      <image class="image" v-else :src="defaultImg" />
+      <image class="image" :src="item.coverUrl || defaultImg"></image>
     </view>
     <view class="list-item-box border-b">
-      <text class="list-item-content fs14">{{options.title}}</text>
-      <!-- <rich-text :nodes="options.content"></rich-text> -->
+      <text class="list-item-content fs14">{{ item.title }}</text>
     </view>
     <view class="type-item flex-row">
       <view>
-        <text class="type fs12" v-if="options.tags">{{options.tags}}</text>
+        <text class="type fs12" v-if="item.tags">{{ item.tags }}</text>
       </view>
       <view class="type-item">
-        <view class="iconfont vt" :class="[options.status === 0 ? 'wm-iconxin' : 'wm-iconaixin1']" @click.stop="_someLove(options)"></view>
+        <view class="iconfont vt" :class="[item.status === 0 ? 'wm-iconxin' : 'wm-iconaixin1']" @click.stop="parise(item)"></view>
         <view>
-          <text class="fs14 mr20">{{options.praise_count}}</text>
+          <text class="fs14 mr20">{{ item.praise_count }}</text>
         </view>
       </view>
     </view>
@@ -24,28 +22,24 @@
 
 <script>
   export default {
+    name: 'NewsItem',
     data() {
       return {
         defaultImg: 'https://image.dugoogle.com/uploads/allimg/190621/18-1Z621160T90-L.jpg'
       }
     },
     props: {
-      options: {
+      item: {
         type: Object,
-        default: () => {
-          return {}
-        }
+        required: true
       }
     },
     methods: {
       click() {
         this.$emit('click')
       },
-      close(e) {
-        this.$emit('close')
-      },
-      _someLove(options) {
-        this.$emit('someLove', options)
+      parise(item) {
+        this.$emit('parise', item)
       }
     }
   }
@@ -83,9 +77,6 @@
     width: 100%;
     display: block;
     height: 70rpx;
-    // padding: 26rpx 0 30rpx;
-    // word-break: break-all;
-    // word-wrap:break-word;
     white-space: normal;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -101,7 +92,6 @@
     justify-content: space-between;
     align-items: center;
     height: 72rpx;
-    // padding:0 20rpx;
   }
 
   .type {
@@ -121,7 +111,5 @@
   .vt {
     vertical-align: middle;
     margin-top: 8rpx;
-    // color:#F54120;
-    // background: #F54120;
   }
 </style>
