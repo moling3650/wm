@@ -2,9 +2,9 @@
   <view class="log-container">
     <view v-if="method !== 'weixin'">
       <view class="log-img-box">
-        <image class="img" src="../../static/logo.png" mode=""></image>
+        <image class="img" src="../../static/logo.png"></image>
       </view>
-      <form @submit="formSubmit" @reset="formReset" class="form-list">
+      <form @submit="formSubmit" class="form-list">
         <view class="form-item mr24">
           <view class="label">
             <text class="text fs14 color33">手机号码</text>
@@ -29,7 +29,7 @@
             <input class="uni-input uni-input-code fs14" v-model="smsCode" name="input" placeholder="请输入验证码" />
           </view>
           <view>
-            <button class="btn-code fs14 color99" :class="{ 'active': isDisabled }" :disabled="isDisabled" @click="_getSmsCode">
+            <button class="btn-code fs14 color99" :class="{ 'active': isDisabled }" :disabled="isDisabled" @click="getSmsCode">
               {{ smsCodeText }}
             </button>
           </view>
@@ -42,9 +42,9 @@
         </view>
       </form>
       <view class="footer-list">
-        <view class="mr-item12" v-for="(item, index) in footerNav" :key="item.text" :class="{'border-lr': index === 1}"
-          @click="tab(index)">
-          <text class="color99 fs14" :class="{'color-default': courrIdenx === index}">{{ item.text }}</text>
+        <view class="mr-item12" v-for="(item, index) in submitMethods" :key="item.text" :class="{'border-lr': index === 1}"
+          @click="tab(item.method)">
+          <text class="color99 fs14" :class="{'color-default': method === item.method}">{{ item.text }}</text>
         </view>
       </view>
     </view>
@@ -53,11 +53,10 @@
 </template>
 
 <script>
-  import wxAuth from '@/components/userAuth/wxAuth.vue'
+  import wxAuth from '@/components/userAuth/wxAuth'
 
   const regPhone = /^1[3|4|5|8|9]\d{9}/
-  const regPws = /^[a-zA-Z0-9]\w{6,18}/;
-  const LoginTypes = ['mobile', 'password', 'weixin']
+  const regPws = /^[a-zA-Z0-9]\w{6,18}/
 
   export default {
     components: {
@@ -65,91 +64,102 @@
     },
     data() {
       return {
-        courrIdenx: 1,
-        accountId: '13424293896',
-        password: 'w123456',
+        method: 'password',
+        accountId: '13763003364',
+        password: 'hp123456',
         smsCodeText: '获取',
         smsCode: '',
-        isDisabled: false,
-        footerNav: [{
+        submitMethods: [{
+            method: 'mobile',
             text: '短信验证码登录'
           },
           {
+            method: 'password',
             text: '账号密码登录'
           },
           {
+            method: 'weixin',
             text: '微信登录'
           },
         ]
-      };
+      }
     },
+
     computed: {
-      method() {
-        return LoginTypes[this.courrIdenx]
+      isDisabled() {
+        return this.smsCodeText !== '获取'
+      }
+    },
+
+    onShow() {
+      const token = uni.getStorageSync('token')
+      if (token) {
+        uni.switchTab({
+          url: '/pages/recommend/recommend'
+        })
       }
     },
     methods: {
-      tab(index) {
-        this.courrIdenx = index
+      // 切换登录方式
+      tab(method) {
+        this.method = method
+        clearInterval(this.timer)
+        this.smsCodeText = '获取'
       },
-      _getSmsCode() {
+
+      // 获取手机验证码
+      getSmsCode() {
         if (!regPhone.test(this.accountId)) {
           uni.showToast({
             title: '请输入手机号',
             icon: 'none'
-          });
+          })
           return false
         }
+        this.checkedAccountId = this.accountId // 保存验证的手机号
         let time = 60
         this.timer = setInterval(() => {
           if (time === 0) {
             this.smsCodeText = '获取'
-            this.isDisabled = false
             clearInterval(this.timer)
           } else {
-            this.isDisabled = true
             this.smsCodeText = (time < 10 ? '0' + time : time) + 's'
-            time--;
+            time--
           }
         }, 1000)
       },
+
+      // 用户登录
       formSubmit() {
-        const parmas = {
+        const params = {
           accountId: this.accountId,
           method: this.method
         }
-        console.log(uni.getStorageSync('token'), '---aa---')
-        if (this.method === 'mobile') {
-          // 短信验证码登录
-          parmas.smsCode = this.smsCode
-        } else if (this.method === 'password') {
-          // 账号密码登录
+        if (this.method === 'mobile') { // 短信验证码登录
+          params.smsCode = this.smsCode
+        } else if (this.method === 'password') { // 账号密码登录
           if (!regPhone.test(this.accountId) || !regPws.test(this.password)) {
             uni.showToast({
               title: '手机格式或密码不正确',
               icon: 'none'
-            });
+            })
             return false
           }
-          parmas.password = this.password
+          params.password = this.password
         }
-        this.$api.login(parmas).then(res => {
-          if (res.code === 200) {
-            console.log(res.data.token, 'res.data.token')
-            uni.setStorageSync('token', res.data.token)
-            this.timer = setTimeout(() => {
-              uni.switchTab({
-                url: '/pages/recommend/recommend'
-              });
-            }, 500)
-          }
+        this.$api.login(params).then(res => {
+          uni.setStorageSync('token', res.token)
+          uni.switchTab({
+            url: '/pages/recommend/recommend'
+          })
         })
       },
-      formReset() {},
+
+      // 跳转注册页面
       gotoRegister() {
-        uni.switchTab({
-          url: '/pages/recommend/recommend'
-        });
+        uni.navigateTo({
+          url: '/pages/register/index'
+        })
       }
     },
 
