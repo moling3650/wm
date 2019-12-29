@@ -4,6 +4,7 @@ const errerCodeMap = {
   402: '没有登录或Token过期',
   403: '没有权限',
   404: '没有定义，或是资源没有被找到',
+  405: '业务异常',
   500: '代码异常'
 }
 
@@ -20,10 +21,7 @@ const request = (method, url, data) => {
     if (res && res.data && res.data.code === 200) {
       return res.data.data
     } else {
-      uni.showToast({
-        title: res.data.msg,
-        icon: 'none'
-      })
+      return Promise.reject(res.data)
     }
   }).catch(error => {
     if (!errerCodeMap[error.code]) {
@@ -34,7 +32,7 @@ const request = (method, url, data) => {
         title: error.msg,
         icon: 'none'
       })
-      return Promise.reject()
+      return Promise.reject(error)
     }
   })
 }
