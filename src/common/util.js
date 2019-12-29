@@ -20,7 +20,8 @@ function friendlyDate(timestamp) {
     return formats['year'].replace('%n%', years)
   }
   if (months > 0) {
-    return formats['month'].replace('%n%', months)
+    const date = new Date(timestamp)
+    return `${date.getMonth() + 1}- ${date.getDate()}`
   }
   if (days > 0) {
     return formats['day'].replace('%n%', days)
