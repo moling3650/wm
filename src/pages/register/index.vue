@@ -1,145 +1,142 @@
 <template>
-  <form>
-    <ul class="logs-container">
-      <li class="form-list form-list-b-25">
-        <div class="label">
-          <label for="">手机号码</label>
-        </div>
-        <div class="form-item">
-          <input type="text" class="form-item-input" placeholder="请输入手机号">
-        </div>
-      </li>
-      <li class="form-list form-list-b-25">
-        <div class="label">
-          <label for="">短信验证码</label>
-        </div>
-        <div class="form-item">
-          <input type="text" class="form-item-code" placeholder="请输入手机验证码">
-        </div>
-        <div class="getcode">
-          <button class="btn code-btn">获取</button>
-        </div>
-      </li>
-      <li class="form-list form-list-b-25">
-        <div class="label">
-          <label for="">登录密码</label>
-        </div>
-        <div class="form-item">
-          <input type="text" class="form-item-input" placeholder="请输入密码">
-        </div>
-      </li>
-      <li class="form-right">
-        <button class="submit">提交</button>
-      </li>
-    </ul>
+  <form class="form" @submit="formSubmit">
+    <view class="form-item">
+      <view class="form-label">手机号码</view>
+      <input class="form-control full uni-input" v-model="form.accountId" maxlength="11" placeholder="请填写手机号码" @blur="checkAccountId" />
+    </view>
+    <view class="form-item">
+      <view class="form-label">登录密码</view>
+      <input class="form-control full uni-input" v-model="form.password" maxlength="18" type="password" placeholder="请填写登录密码" />
+    </view>
+    <view class="form-item">
+      <view class="form-label">昵称</view>
+      <input class="form-control full uni-input" v-model="form.nickname" maxlength="18" placeholder="请填写昵称" />
+    </view>
+    <view class="form-item">
+      <view class="form-label">验证码</view>
+      <input class="form-control uni-input" v-model="form.imgCode" maxlength="18" placeholder="请填写验证码" />
+      <image class="form-img" :src="img" mode="aspectFit" @click="getImgCode" />
+    </view>
+    <view class="form-item">
+      <button class="form-submit" form-type="submit">提交注册</button>
+    </view>
   </form>
 </template>
 
 <script>
-  import {
-    friendlyDate
-  } from '@/common/util'
+  const regPhone = /^1[3|4|5|8|9]\d{9}/
+  const regPws = /^[a-zA-Z0-9]\w{6,18}/
 
   export default {
     data() {
       return {
-        logs: [],
-        imgUrls: [
-          'http://mss.sankuai.com/v1/mss_51a7233366a4427fa6132a6ce72dbe54/newsPicture/05558951-de60-49fb-b674-dd906c8897a6',
-          'http://mss.sankuai.com/v1/mss_51a7233366a4427fa6132a6ce72dbe54/coursePicture/0fbcfdf7-0040-4692-8f84-78bb21f3395d',
-          'http://mss.sankuai.com/v1/mss_51a7233366a4427fa6132a6ce72dbe54/management-school-picture/7683b32e-4e44-4b2f-9c03-c21f34320870'
-        ]
+        form: {
+          accountId: '',
+          password: '',
+          nickname: '',
+          imgCodeId: '',
+          imgCode: '',
+        },
+        img: ''
       }
     },
 
     created() {
-      let logs
-      if (mpvuePlatform === 'my') {
-        logs = mpvue.getStorageSync({
-          key: 'logs'
-        }).data || []
-      } else {
-        logs = mpvue.getStorageSync('logs') || []
+      this.getImgCode()
+    },
+
+    methods: {
+      // 获取图片验证码
+      getImgCode() {
+        this.$api.getImageCode().then(data => {
+          this.form.imgCodeId = data.id
+          this.img = data.data
+        })
+      },
+
+      // 验证账号
+      checkAccountId() {
+        if (!regPhone.test(this.form.accountId)) {
+          uni.showToast({
+            title: '请填写正确的手机号码',
+            icon: 'none'
+          })
+          return false
+        }
+        return true
+      },
+
+      // 验证密码
+      checkPassword() {
+        if (!regPhone.test(this.form.password)) {
+          uni.showToast({
+            title: '请填写8-16位的大小写英文或数字',
+            icon: 'none'
+          })
+          return false
+        }
+        return true
+      },
+
+      // 提交注册
+      formSubmit() {
+        if (this.checkAccountId() && this.this.checkPassword()) {
+          this.$api.register(this.form).then(data => {
+            uni.navigateTo({
+              url: '/pages/logs/log'
+            })
+          })
+        }
       }
-      this.logs = logs.map(log => friendlyDate(new Date(log)))
     }
   }
 </script>
 
-<style lang="css" scoped>
-  .logs-container {
-    padding: 25px;
-  }
-
-  .form-list {
+<style lang="scss" scoped>
+  .form {
     display: flex;
-    flex-direction: row;
-    height: 40px;
-    align-items: center;
-  }
 
-  .form-list-b-25 {
-    margin-bottom: 18px;
-  }
+    .form-item {
+      display: flex;
+      flex-flow: row nowrap;
+      align-items: center;
+      height: 80rpx;
+      margin: 36rpx 56rpx;
+    }
 
-  .label {
-    width: 70px;
-    text-align: left;
-    font-family: PingFangSC-Regular;
-    font-size: 14px;
-    color: #333333;
-    letter-spacing: -1.23px;
-  }
+    .form-label {
+      width: 140rpx;
+      font-size: 28rpx;
+      color: #333;
+    }
 
-  .form-item-input {
-    width: 249px;
-  }
+    .form-control {
+      flex: auto;
 
-  .form-item-code {
-    width: 178px;
-  }
+      &.uni-input {
+        height: 80rpx;
+        padding-left: 18rpx;
+        border: 2rpx solid #E6E6E6;
+        border-radius: 10rpx;
+        background: #FFF;
+      }
+    }
 
-  .form-item {
-    text-align: left;
-  }
+    .form-img {
+      width: 200rpx;
+      height: 80rpx;
+      margin-left: 8rpx;
+    }
 
-  .form-item input {
-    height: 40px;
-    padding-left: 6px;
-    border: 1px solid #E6E6E6;
-    border-radius: 5px;
-    font-size: 14px;
-    color: #BFBFBF;
-    letter-spacing: 1px;
-  }
-
-  .code-btn {
-    width: 64px;
-    height: 39px;
-    border: 0;
-    background: #ECECEC;
-    border-radius: 5px;
-    font-family: PingFangSC-Regular;
-    font-size: 14px;
-    color: #BFBFBF;
-    letter-spacing: -1.23px;
-    text-align: center;
-    margin-left: 9px;
-  }
-
-  .form-right {
-    margin-top: 144px;
-  }
-
-  .submit {
-    width: 100%;
-    height: 40px;
-    line-height: 40px;
-    background: #4A90E2;
-    border: 1px solid #22A0E2;
-    border-radius: 5px;
-    font-size: 14px;
-    color: #FFFFFF;
-    letter-spacing: -1.23px;
+    .form-submit {
+      width: 100%;
+      height: 80rpx;
+      border: 2rpx solid #22A0E2;
+      border-radius: 10rpx;
+      margin-top: 400rpx;
+      color: #FFF;
+      font-size: 28rpx;
+      background: #4A90E2;
+    }
   }
 </style>
