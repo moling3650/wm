@@ -11,7 +11,7 @@
         <text class="type fs12" v-if="item.tags">{{ item.tags }}</text>
       </view>
       <view class="type-item">
-        <view class="iconfont vt" :class="[item.status === 0 ? 'wm-iconxin' : 'wm-iconaixin1']" @click.stop="parise(item)"></view>
+        <view class="iconfont vt" :class="!item.status ? 'icon-praise' : 'icon-praise-fill'" @click.stop="parise(item)"></view>
         <view>
           <text class="fs14 mr20">{{ item.praise_count }}</text>
         </view>

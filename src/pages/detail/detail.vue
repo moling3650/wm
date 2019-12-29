@@ -13,16 +13,16 @@
         <input v-model="word" type="text" class="uni-input" placeholder="评论一下吧">
         <view class="icons">
           <view class="icon">
-            <text class="iconfont wm-iconaixin1"></text>
-            <text class="text">4.1w</text>
+            <text class="iconfont icon-praise"></text>
+            <text class="text">{{ count.praiseCount }}</text>
           </view>
           <view class="icon">
-            <text class="iconfont wm-iconaixin1"></text>
-            <text class="text">4.1w</text>
+            <text class="iconfont icon-collection"></text>
+            <text class="text">{{ count.collectionCount }}</text>
           </view>
           <view class="icon">
-            <text class="iconfont wm-iconaixin1"></text>
-            <text class="text">1.7w</text>
+            <text class="iconfont icon-comment"></text>
+            <text class="text">{{ count.commentCount }}</text>
           </view>
         </view>
       </view>
@@ -41,6 +41,7 @@
     data() {
       return {
         news: {},
+        count: {},
         word: '',
         coverUrl: '',
         content: ''
@@ -67,6 +68,7 @@
           // #endif
           this.news = data.news
           this.content = data.news.content
+          this.count = data.newsReportPo
         }).catch(err => {
           this.content = FAIL_CONTENT
         })

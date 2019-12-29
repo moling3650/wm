@@ -1,7 +1,6 @@
 @font-face {
   font-family: "iconfont";
   src: url('~@/static/iconfont/iconfont.ttf');
-
 }
 
 .iconfont {
@@ -12,54 +11,26 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.wm-iconxin:before {
-  content: "\e6b3";
+.icon-praise:before {
+  content: "\e616";
 }
 
-.wm-iconxiangshangzhanhang:before {
-  content: "\ec0b";
+.icon-comment:before {
+  content: "\e603";
 }
 
-.wm-iconheart:before {
-  content: "\e7df";
+.icon-collection-fill:before {
+  content: "\e630";
 }
 
-.wm-iconright:before {
-  content: "\e7eb";
+.icon-collection:before {
+  content: "\e632";
 }
 
-.wm-iconleft:before {
-  content: "\e7ec";
+.icon-user:before {
+  content: "\e63d";
 }
 
-.wm-iconheart-fill:before {
-  content: "\e849";
-}
-
-.wm-iconeye-fill:before {
-  content: "\e869";
-}
-
-.wm-iconQQ:before {
-  content: "\e882";
-}
-
-.wm-iconwechat-fill:before {
-  content: "\e883";
-}
-
-.wm-iconweibo-circle-fill:before {
-  content: "\e88a";
-}
-
-.wm-icondianzan:before {
-  content: "\ec7f";
-}
-
-.wm-iconaixin1:before {
-  content: "\e85c";
-}
-
-.wm-iconsousuo:before {
-  content: "\e6db";
+.icon-praise-fill:before {
+  content: "\e60a";
 }
