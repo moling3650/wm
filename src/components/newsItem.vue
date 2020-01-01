@@ -11,7 +11,7 @@
         <text class="type fs12" v-if="item.tags">{{ item.tags }}</text>
       </view>
       <view class="type-item">
-        <view class="iconfont vt" :class="!item.status ? 'icon-praise' : 'icon-praise-fill'" @click.stop="parise(item)"></view>
+        <view class="iconfont vt" :class="!item.status ? 'icon-praise' : 'icon-praise-fill'" @click.stop="saveParise(item)"></view>
         <view>
           <text class="fs14 mr20">{{ item.praise_count }}</text>
         </view>
@@ -35,11 +35,23 @@
       }
     },
     methods: {
+
       click() {
         this.$emit('click')
       },
-      parise(item) {
-        this.$emit('parise', item)
+
+      saveParise(news) {
+        this.$api.saveParise({
+          targetType: 1,
+          targetId: news.id,
+          title: news.title,
+        }).then(_ => {
+          this.$emit('parised')
+          uni.showToast({
+            title: '点赞成功',
+            icon: 'none'
+          })
+        })
       }
     }
   }
