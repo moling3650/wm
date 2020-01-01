@@ -3,7 +3,7 @@
     <text class="iconfont icon-user"></text>
     <view class="wm-comment-main">
       <view class="wm-comment-main-header">
-        <view class="author">{{ comment.author }}</view>
+        <view class="author">{{ comment.userId }}</view>
         <view class="time">{{ comment.createTime | friendlyDate }}</view>
       </view>
       <view class="wm-comment-main-body">
@@ -13,6 +13,9 @@
           <text class="count">{{ comment.pariseCount }}</text>
         </view>
       </view>
+      <view class="wm-comment-main-footer">
+        <text class="text color-default">查看N条回复</text>
+      </view>
     </view>
   </view>
 </template>
@@ -21,7 +24,7 @@
   import {
     friendlyDate
   } from '@/common/util'
-  
+
   export default {
     name: 'WmComment',
     props: {
@@ -39,7 +42,7 @@
 <style lang="scss">
   .wm-comment {
     display: flex;
-    min-height: 10rpx;
+    margin: 20rpx 0;
 
     .icon-user {
       font-size: 70rpx;
@@ -53,7 +56,6 @@
       &-header {
         display: flex;
         height: 70rpx;
-        flex-flow: row nowrap;
         justify-content: space-between;
         align-items: center;
 
@@ -71,13 +73,12 @@
 
       &-body {
         display: flex;
-        flex-flow: row nowrap;
         justify-content: space-between;
-        align-items: flex-start;
         margin-top: 20rpx;
 
         .content {
           flex: 1;
+          font-size: 26rpx;
         }
 
         .parise {
@@ -94,6 +95,13 @@
             font-size: 24rpx;
             color: #333;
           }
+        }
+      }
+
+      &-footer {
+        margin: 20rpx 0;
+        .text {
+          font-size: 22rpx;
         }
       }
     }
