@@ -24,8 +24,8 @@
 </template>
 
 <script>
-  const regPhone = /^1[3|4|5|8|9]\d{9}/
-  const regPws = /^[a-zA-Z0-9]\w{6,18}/
+  const regPhone = /^1[3|4|5|8|9]\d{9}$/
+  const regPws = /^[a-zA-Z0-9]{6,18}$/
 
   export default {
     data() {
@@ -68,9 +68,9 @@
 
       // 验证密码
       checkPassword() {
-        if (!regPhone.test(this.form.password)) {
+        if (!regPws.test(this.form.password)) {
           uni.showToast({
-            title: '请填写8-16位的大小写英文或数字',
+            title: '请填写6-18位的大小写英文或数字',
             icon: 'none'
           })
           return false
@@ -80,7 +80,7 @@
 
       // 提交注册
       formSubmit() {
-        if (this.checkAccountId() && this.this.checkPassword()) {
+        if (this.checkAccountId() && this.checkPassword()) {
           this.$api.register(this.form).then(data => {
             uni.navigateTo({
               url: '/pages/logs/log'
