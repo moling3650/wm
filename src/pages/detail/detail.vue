@@ -1,6 +1,6 @@
 <template>
   <view id="Detail">
-    <view class="main">
+    <view class="main" v-show="!commentVisible">
       <image class="banner" :src="news.coverUrl" mode="widthFix" />
       <view class="article">
         <view class="title fs14 color33"> {{ news.title }}</view>
@@ -8,23 +8,33 @@
       </view>
     </view>
 
-    <view class="comment-wrap">
-      <view class="footer">
-        <input v-model="word" type="text" class="uni-input" placeholder="评论一下吧">
-        <view class="icons">
-          <view class="icon">
-            <text class="iconfont icon-praise"></text>
-            <text class="text">{{ count.praiseCount }}</text>
-          </view>
-          <view class="icon">
-            <text class="iconfont icon-collection"></text>
-            <text class="text">{{ count.collectionCount }}</text>
-          </view>
-          <view class="icon">
-            <text class="iconfont icon-comment"></text>
-            <text class="text">{{ count.commentCount }}</text>
-          </view>
+    <view class="main" v-show="commentVisible">
+      <view class="comment-wrap">
+        <text class="comment-count color-default">评论（{{count.commentCount}}）</text>
+        <view class="comments">
+          <wm-comment v-for="c in comments" :key="c.id" :comment="c" />
         </view>
+      </view>
+    </view>
+
+    <view class="footer-wrap">
+      <view class="footer">
+        <input v-model="word" type="text" class="uni-input" placeholder="评论一下吧" @focus="sendBtnVisible = true">
+        <button v-if="sendBtnVisible" type="primary" size="mini" @click="saveComment">发送</button>
+
+        <view v-show="!sendBtnVisible" class="icon" @click="saveParise">
+          <text class="iconfont icon-praise"></text>
+          <text class="text">{{ count.praiseCount }}</text>
+        </view>
+        <view v-show="!sendBtnVisible" class="icon" @click="saveCollection">
+          <text class="iconfont icon-collection"></text>
+          <text class="text">{{ count.collectionCount }}</text>
+        </view>
+        <view v-show="!sendBtnVisible" class="icon" @click="showComment">
+          <text class="iconfont icon-comment"></text>
+          <text class="text">{{ count.commentCount }}</text>
+        </view>
+
       </view>
     </view>
   </view>
@@ -34,14 +44,22 @@
   // #ifdef MP-ALIPAY
   import htmlParser from '@/common/html-parser'
   // #endif
+  import wmComment from '@/components/wmCommet'
+
   const FAIL_CONTENT = '<p>获取信息失败</p>'
 
   export default {
     name: 'Detail',
+    components: {
+      wmComment
+    },
     data() {
       return {
+        commentVisible: false,
+        sendBtnVisible: false,
         news: {},
         count: {},
+        comments: [],
         word: '',
         coverUrl: '',
         content: ''
@@ -72,7 +90,61 @@
         }).catch(err => {
           this.content = FAIL_CONTENT
         })
+      },
+
+      showComment() {
+        this.commentVisible = !this.commentVisible
+        this.$api.queryComment({
+          targetId: this.news.id
+        }).then(data => {
+          this.comments = data.items
+        })
+      },
+
+      saveParise() {
+        this.$api.saveParise({
+          targetType: 1,
+          targetId: this.news.id,
+          title: this.news.title,
+        }).then(_ => {
+          uni.showToast({
+            title: '点赞成功',
+            icon: 'none'
+          })
+        })
+      },
+
+      saveCollection() {
+        this.$api.saveCollection({
+          targetType: 1,
+          targetId: this.news.id,
+          title: this.news.title,
+        }).then(_ => {
+          uni.showToast({
+            title: '收藏成功',
+            icon: 'none'
+          })
+        })
+      },
+
+      saveComment() {
+        if (this.word) {
+          this.$api.saveComment({
+            targetType: 1,
+            targetId: this.news.id,
+            title: this.news.title,
+            content: this.word
+          }).then(_ => {
+            uni.showToast({
+              title: '评论成功',
+              icon: 'none'
+            })
+            this.sendBtnVisible = false
+            this.word = ''
+          })
+        }
       }
+
     }
   }
 </script>
@@ -109,6 +181,22 @@
   }
 
   .comment-wrap {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    padding: 40rpx;
+    border-top: 40rpx solid #F5F5F9;
+    background-color: #FFF;
+
+    .comment-count {
+      font-size: 12px;
+      margin-bottom: 40rpx;
+    }
+  }
+
+  .footer-wrap {
     position: fixed;
     bottom: 0;
     left: 0;
@@ -121,7 +209,6 @@
 
   .footer {
     display: flex;
-    flex-direction: row;
     justify-content: space-between;
     align-items: center;
     height: 100rpx;
@@ -129,7 +216,7 @@
   }
 
   .uni-input {
-    width: 300rpx;
+    flex: 1;
     height: 70rpx;
     padding: 0 40rpx;
     border: 2rpx solid #E6;
@@ -138,26 +225,19 @@
     color: #333;
   }
 
-  .icons {
-    width: 400rpx;
-    height: 70rpx;
+  .icon {
+    flex-basis: 100rpx;
     display: flex;
-    flex-direction: row;
-    justify-content: space-around;
     align-items: center;
 
-    .icon {
-      display: flex;
-      align-items: center;
-    }
-
-    .text {
+    .iconfont {
+      margin-right: 10rpx;
+      font-size: 48rpx;
       color: #000;
     }
 
-    .iconfont {
-      margin-right: 4rpx;
-      font-size: 48rpx;
+    .text {
+      font-size: 24rpx;
       color: #000;
     }
   }
