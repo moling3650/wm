@@ -8,9 +8,9 @@
       </view>
       <view class="wm-comment-main-body">
         <view class="content">{{ comment.content }}</view>
-        <view class="parise">
+        <view class="praise">
           <text class="iconfont icon-praise"></text>
-          <text class="count">{{ comment.pariseCount }}</text>
+          <text class="count">{{ comment.praiseCount }}</text>
         </view>
       </view>
       <view class="wm-comment-main-footer">
@@ -81,7 +81,7 @@
           font-size: 26rpx;
         }
 
-        .parise {
+        .praise {
           display: flex;
           align-items: center;
           margin-left: 20rpx;

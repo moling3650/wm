@@ -1,7 +1,7 @@
 <template>
   <view class="list">
     <view v-for="item in dataList" :key="item.id" class="list-item">
-      <news-item :item="item" @click="gotoDetail(item.id)" @parise="parise"></news-item>
+      <news-item :item="item" @click="gotoDetail(item.id)" @praised="updateNews"></news-item>
     </view>
   </view>
 </template>
@@ -75,19 +75,9 @@
         })
       },
 
-      // 点赞
-      parise(news) {
-        const parmes = {
-          targetId: news.id,
-          targetType: 1,
-          title: news.title
-        }
-        // this.$api.saveParise(parmes).then(res => {
-        //   const index = this.newsList.findIndex(n => n.id === news.id)
-        //   if (!~index) {
-        //     this.newsList[index].status = -1
-        //   }
-        // })
+      // 点赞后更新文章状态
+      updateNews(news) {
+
       }
     }
   }

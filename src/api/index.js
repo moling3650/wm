@@ -14,7 +14,7 @@ const api = {
 // 用户行为列表
 const behaviorList = [
   'collection', // 收藏
-  'parise', // 点赞
+  'praise', // 点赞
   'forward', // 关注
   'comment', // 评论
   'reply', // 回复

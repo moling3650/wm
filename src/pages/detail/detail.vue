@@ -22,7 +22,7 @@
         <input v-model="word" type="text" class="uni-input" placeholder="评论一下吧" @focus="sendBtnVisible = true">
         <button v-if="sendBtnVisible" type="primary" size="mini" @click="saveComment">发送</button>
 
-        <view v-show="!sendBtnVisible" class="icon" @click="saveParise">
+        <view v-show="!sendBtnVisible" class="icon" @click="savePraise">
           <text class="iconfont icon-praise"></text>
           <text class="text">{{ count.praiseCount }}</text>
         </view>
@@ -101,8 +101,8 @@
         })
       },
 
-      saveParise() {
-        this.$api.saveParise({
+      savePraise() {
+        this.$api.savePraise({
           targetType: 1,
           targetId: this.news.id,
           title: this.news.title,
