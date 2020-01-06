@@ -83,15 +83,14 @@
   }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
   .list {
     display: flex;
-    flex-direction: row;
     flex-wrap: wrap;
-    // padding: 29rpx;
+    justify-content: center;
+    &-item {
+      margin: 12rpx;
+    }
   }
 
-  .list-item {
-    margin: 20rpx 0 0 20rpx;
-  }
 </style>
