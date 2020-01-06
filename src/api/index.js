@@ -9,7 +9,9 @@ const api = {
   register: params => request('POST', '/register', params), // 注册帐号
   logout: _ => request('POST', '/user/logout'), // 退出登录
   getNews: params => request('POST', '/news', params), // 查询文章列表
-  getNewsById: id => request('GET', `/news/${id}`) // 查询文章详情
+  getNewsById: id => request('GET', `/news/${id}`), // 查询文章详情
+  getCommentsByNewsId: (id, params) => request('GET', `/news/${id}/comments`, params), // 查询文章评论
+  getRepliesByCommentId: (id, params) => request('GET', `/comments/{id}/replies`, params) // 查询评论回复
 }
 // 用户行为列表
 const behaviorList = [
