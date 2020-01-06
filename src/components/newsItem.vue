@@ -1,22 +1,23 @@
 <template>
-  <view class="view border" v-if="item.title" @click="click">
-    <view>
-      <image class="image" :src="item.coverUrl || defaultImg"></image>
+  <view class="view border" @click="click">
+    <view class="cover-wrap">
+      <image class="cover" :src="item.coverUrl || defaultImg"></image>
     </view>
-    <view class="list-item-box border-b">
-      <text class="list-item-content fs14">{{ item.title }}</text>
-    </view>
-    <view class="type-item flex-row">
-      <view>
-        <text class="type fs12" v-if="item.tags">{{ item.tags }}</text>
+    <view class="container">
+      <view class="header">
+        <p class="title">{{ item.title }}</p>
       </view>
-      <view class="type-item">
-        <view class="iconfont vt" :class="!item.status ? 'icon-praise' : 'icon-praise-fill'" @click.stop="savePraise(item)"></view>
-        <view>
-          <text class="fs14 mr20">{{ item.praise_count }}</text>
+      <view class="footer">
+        <view class="tags">
+          <text class="tag" v-if="item.tags">{{ item.tags }}</text>
+        </view>
+        <view class="praise">
+          <view class="iconfont" :class="!item.isPraise ? 'icon-praise' : 'icon-praise-fill'" @click.stop="savePraise(item)"></view>
+          <text class="count">{{ item.praiseCount }}</text>
         </view>
       </view>
     </view>
+  </view>
   </view>
 </template>
 
@@ -57,71 +58,66 @@
   }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
   .view {
     width: 344rpx;
     flex-direction: column;
-  }
-
-  .flex-row {
-    flex-direction: row;
-  }
-
-  .flex-col {
-    flex-direction: column;
-  }
-
-  .border {
     border-radius: 10rpx;
     border: 2rpx solid #E6E6E6;
   }
 
-  .image {
-    width: 342rpx;
-    height: 354rpx;
-  }
-
-  .list-item-box {
-    margin: 0 12rpx;
-  }
-
-  .list-item-content {
+  .cover-wrap {
     width: 100%;
-    display: block;
-    height: 70rpx;
-    white-space: normal;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    margin-bottom: 20rpx;
+    height: 354rpx;
+
+    .cover {
+      width: 100%;
+      height: 100%;
+    }
   }
 
-  .border-b {
-    border-bottom: 2rpx solid #E6E6E6;
-  }
-
-  .type-item {
+  .container {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: 72rpx;
-  }
+    flex-direction: column;
+    height: 216rpx;
 
-  .type {
-    display: inline-block;
-    padding: 6rpx 15rpx;
-    border: 2rpx solid #ccc;
-    border-radius: 20rpx;
-    // text-align: left;
-    margin-left: 20rpx;
-  }
+    .header {
+      height: 136rpx;
+      margin: 0 16rpx;
 
-  .mr20 {
-    margin: 0 20rpx 0 10rpx;
-    vertical-align: middle;
-  }
+      .title {
+        height: 80rpx;
+        overflow: hidden;
+        margin: 30rpx 0;
+        font-size: 28rpx;
+        line-height: 40rpx;
+      }
+    }
 
-  .vt {
-    vertical-align: middle;
-    margin-top: 8rpx;
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex: 1;
+      border-top: 2rpx solid #F2F2F2;
+      margin: 0 16rpx;
+      .praise {
+        display: flex;
+        align-items: center;
+        height: 40rpx;
+        flex-basis: 100rpx;
+        .iconfont {
+          flex-basis: 30rpx;
+        }
+        .count {
+          flex: 1;
+          margin-left: 10rpx;
+          font-size: 28rpx;
+          color: #4A4A4A;
+          letter-spacing: 2rpx;
+        }
+      }
+    }
+
   }
 </style>
