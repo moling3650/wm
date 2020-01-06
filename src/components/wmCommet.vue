@@ -9,12 +9,12 @@
       <view class="wm-comment-main-body">
         <view class="content">{{ comment.content }}</view>
         <view class="praise">
-          <text class="iconfont icon-praise"></text>
+          <text class="iconfont" :class="!comment.isPraise ? 'icon-praise' : 'icon-praise-fill'"></text>
           <text class="count">{{ comment.praiseCount }}</text>
         </view>
       </view>
       <view class="wm-comment-main-footer">
-        <text class="text color-default">查看N条回复</text>
+        <text class="text color-default">查看{{ comment.replyCount }}条回复</text>
       </view>
     </view>
   </view>

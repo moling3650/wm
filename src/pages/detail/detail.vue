@@ -23,11 +23,11 @@
         <button v-if="sendBtnVisible" type="primary" size="mini" @click="saveComment">发送</button>
 
         <view v-show="!sendBtnVisible" class="icon" @click="savePraise">
-          <text class="iconfont icon-praise"></text>
+          <text class="iconfont" :class="news.isPraise ? 'icon-praise-fill' : 'icon-praise'"></text>
           <text class="text">{{ count.praiseCount }}</text>
         </view>
         <view v-show="!sendBtnVisible" class="icon" @click="saveCollection">
-          <text class="iconfont icon-collection"></text>
+          <text class="iconfont" :class="news.isCollection ? 'icon-collection-fill' : 'icon-collection'"></text>
           <text class="text">{{ count.collectionCount }}</text>
         </view>
         <view v-show="!sendBtnVisible" class="icon" @click="showComment">
