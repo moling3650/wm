@@ -34,3 +34,7 @@
 .icon-praise-fill:before {
   content: "\e60a";
 }
+
+.icon-search:before {
+  content: "\e609";
+}
