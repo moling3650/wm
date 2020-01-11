@@ -3,7 +3,7 @@
     <text class="iconfont icon-user"></text>
     <view class="wm-comment-main">
       <view class="wm-comment-main-header">
-        <view class="author">{{ comment.userId }}</view>
+        <view class="author">{{ comment.nickname }}</view>
         <view class="time">{{ comment.createTime | friendlyDate }}</view>
       </view>
       <view class="wm-comment-main-body">
