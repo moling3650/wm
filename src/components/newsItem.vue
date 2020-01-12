@@ -1,5 +1,5 @@
 <template>
-  <view class="view border" @click="click">
+  <view class="view border" @click="gotoDetail">
     <view class="cover-wrap">
       <image class="cover" :src="item.coverUrl || defaultImg"></image>
     </view>
@@ -37,10 +37,14 @@
     },
     methods: {
 
-      click() {
-        this.$emit('click')
+      // 跳转详情页面
+      gotoDetail(id) {
+        uni.navigateTo({
+          url: `/pages/detail/detail?id=${this.item.id}`
+        })
       },
 
+      // 点赞
       savePraise(news) {
         this.$api.savePraise({
           targetType: 1,

@@ -68,13 +68,6 @@
         this._fetchNews(this.pageIndex + 1)
       },
 
-      // 跳转详情页面
-      gotoDetail(id) {
-        uni.navigateTo({
-          url: `/pages/detail/detail?id=${id}`
-        })
-      },
-
       // 点赞后更新文章状态
       updateNews(news) {
 
