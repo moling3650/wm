@@ -15,17 +15,26 @@ const api = {
 }
 // 用户行为列表
 const behaviorList = [
-  'collection', // 收藏
-  'praise', // 点赞
-  'forward', // 关注
-  'comment', // 评论
-  'reply', // 回复
-  'vote' // 投票
+  'Collection', // 收藏
+  'Praise', // 点赞
+  'Forward', // 关注
+  'Comment', // 评论
+  'Reply', // 回复
+  'Vote' // 投票
 ]
 behaviorList.forEach(behavior => {
-  const key = behavior.charAt(0).toUpperCase() + behavior.slice(1)
-  api[`save${key}`] = params => request('POST', `/save/${behavior}`, params) // 提交用户行为
-  api[`query${key}`] = params => request('POST', `/my/${behavior}`, params) // 查询用户行为
+  api[`save${behavior}`] = params => request('POST', `/save/${behavior.toLowerCase()}`, params) // 提交用户行为
+  api[`query${behavior}`] = params => request('POST', `/my/${behavior.toLowerCase()}`, params) // 查询用户行为
+})
+
+const dataTypeList = [
+  'NewsCategory', // 文章类别
+  'AdSlot', //广告位置
+  'AdType', //广告类型
+  'MaterialType' //素材类型
+]
+dataTypeList.forEach(dataType => {
+  api[`getEnumBy${dataType}`] = _ => request('GET', `/enum/${dataType.toLowerCase()}`) // 类型枚举
 })
 
 export default api
