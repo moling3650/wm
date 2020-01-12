@@ -23,7 +23,7 @@
               "placeholder": "请输入搜索内容"
             },
             "buttons": [{
-              "fontSize": "32rpx",
+              "fontSize": "16px",
               "text": "搜索"
             }]
           }
@@ -65,10 +65,7 @@
       }
     },
     {
-      "path": "pages/detail/detail",
-      "style": {
-        "navigationBarTitleText": "详情"
-      }
+      "path": "pages/detail/detail"
     },
     {
       "path": "pages/mine/mine",
@@ -101,8 +98,23 @@
   },
   "globalStyle": {
     "navigationBarTextStyle": "white",
-    "navigationBarTitleText": "新闻资讯",
     "navigationBarBackgroundColor": "#2F85FC",
     "backgroundColor": "#FFFFFF"
+  },
+  "condition": {
+    "current": 0,
+    "list": [{
+        "name": "login",
+        "path": "/pages/logs/log"
+      },
+      {
+        "name": "recommend",
+        "path": "/pages/recommend/recommend"
+      },
+      {
+        "name": "popular",
+        "path": "/pages/popular/popular"
+      }
+    ]
   }
 }
