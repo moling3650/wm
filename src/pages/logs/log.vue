@@ -94,8 +94,10 @@
     onShow() {
       const token = uni.getStorageSync('token')
       if (token) {
-        uni.switchTab({
-          url: '/pages/recommend/recommend'
+        this.$api.getUserInfo().then(_ => {
+          uni.switchTab({
+            url: '/pages/recommend/recommend'
+          })
         })
       }
     },
