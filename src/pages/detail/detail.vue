@@ -8,22 +8,22 @@
       </view>
     </view>
 
-    <view class="footer-wrap">
-      <view class="footer">
-        <view class="icon" @click="savePraise">
-          <text class="iconfont" :class="news.isPraise ? 'icon-praise-fill' : 'icon-praise'"></text>
-          <text class="text">{{ count.praiseCount }}</text>
-        </view>
-        <view class="icon" @click="saveCollection">
-          <text class="iconfont" :class="news.isCollection ? 'icon-collection-fill' : 'icon-collection'"></text>
-          <text class="text">{{ count.collectionCount }}</text>
-        </view>
-        <view class="icon" @click="showComments">
-          <text class="iconfont icon-comment"></text>
-          <text class="text">{{ count.commentCount }}</text>
-        </view>
+
+    <view class="footer">
+      <view class="icon" @click="savePraise">
+        <text class="iconfont" :class="news.isPraise ? 'icon-praise-fill' : 'icon-praise'"></text>
+        <text class="text">{{ count.praiseCount }}</text>
+      </view>
+      <view class="icon" @click="saveCollection">
+        <text class="iconfont" :class="news.isCollection ? 'icon-collection-fill' : 'icon-collection'"></text>
+        <text class="text">{{ count.collectionCount }}</text>
+      </view>
+      <view class="icon" @click="showComments">
+        <text class="iconfont icon-comment"></text>
+        <text class="text">{{ count.commentCount }}</text>
       </view>
     </view>
+
   </view>
 </template>
 
@@ -114,7 +114,7 @@
       position: absolute;
       top: 0;
       right: 0;
-      bottom: 100rpx;
+      bottom: 120rpx;
       left: 0;
       overflow: scroll;
     }
@@ -132,40 +132,34 @@
     }
   }
 
-  .footer-wrap {
+  .footer {
     position: fixed;
     bottom: 0;
     left: 0;
-    width: 750rpx;
-    background: #FFF;
-    box-shadow: 20rpx 10rpx 20rpx #2F85FC;
-    border-top: 2rpx solid #E6;
-    color: #FFF;
-  }
-
-  .footer {
+    right: 0;
     display: flex;
     justify-content: flex-end;
     align-items: center;
     height: 100rpx;
     padding: 0 20rpx;
-  }
+    box-shadow: -4rpx 0 10rpx rgba(0, 0, 0, 0.2);
 
-  .icon {
-    flex-basis: 100rpx;
-    flex-grow: 0;
-    display: flex;
-    align-items: center;
+    .icon {
+      flex-basis: 100rpx;
+      flex-grow: 0;
+      display: flex;
+      align-items: center;
 
-    .iconfont {
-      margin-right: 10rpx;
-      font-size: 48rpx;
-      color: #000;
-    }
+      .iconfont {
+        margin-right: 10rpx;
+        font-size: 48rpx;
+        color: #000;
+      }
 
-    .text {
-      font-size: 24rpx;
-      color: #000;
+      .text {
+        font-size: 24rpx;
+        color: #000;
+      }
     }
   }
 </style>
