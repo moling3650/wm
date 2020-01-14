@@ -1,6 +1,14 @@
 import request from '@/common/request'
 
+const getEnumApis = {
+  getEnumByNewsCategory: () => request('GET', `/enum/newscategory`), // 文章类别
+  getEnumByAdSlot: () => request('GET', `/enum/adslot`), //广告位置
+  getEnumByAdType: () => request('GET', `/enum/adtype`), //广告类型
+  getEnumByMaterialType: () => request('GET', `/enum/materialtype`) //素材类型
+}
+
 const api = {
+  ...getEnumApis,
   login: params => request('POST', '/login', params), // 用户登录
   getUserInfo: _ => request('GET', '/user/info'), // 获取登录用户
   getImageCode: _ => request('GET', '/imagecode'), // 获取图片验证码
@@ -11,7 +19,7 @@ const api = {
   getNews: params => request('POST', '/news', params), // 查询文章列表
   getNewsById: id => request('GET', `/news/${id}`), // 查询文章详情
   getCommentsByNewsId: (id, params) => request('GET', `/news/${id}/comments`, params), // 查询文章评论
-  getRepliesByCommentId: (id, params) => request('GET', `/comments/{id}/replies`, params) // 查询评论回复
+  getRepliesByCommentId: (id, params) => request('POST', `/comments/${id}/replies`, params) // 查询评论回复
 }
 // 用户行为列表
 const behaviorList = [
@@ -27,14 +35,6 @@ behaviorList.forEach(behavior => {
   api[`query${behavior}`] = params => request('POST', `/my/${behavior.toLowerCase()}`, params) // 查询用户行为
 })
 
-const dataTypeList = [
-  'NewsCategory', // 文章类别
-  'AdSlot', //广告位置
-  'AdType', //广告类型
-  'MaterialType' //素材类型
-]
-dataTypeList.forEach(dataType => {
-  api[`getEnumBy${dataType}`] = _ => request('GET', `/enum/${dataType.toLowerCase()}`) // 类型枚举
-})
+
 
 export default api
