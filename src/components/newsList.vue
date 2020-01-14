@@ -12,9 +12,15 @@
   export default {
     name: 'NewsList',
     props: {
-      metaId: {
+      apiKey: {
         type: String,
         required: true
+      },
+      apiParams: {
+        type: Object,
+        default () {
+          return {}
+        }
       },
       pageSize: {
         type: Number,
@@ -33,9 +39,9 @@
     computed: {
       params() {
         return {
+          ...this.apiParams,
           pageIndex: this.pageIndex,
-          pageSize: this.pageSize,
-          metaId: this.metaId
+          pageSize: this.pageSize
         }
       }
     },
@@ -45,7 +51,7 @@
         this.pageIndex = pageIndex
         uni.showNavigationBarLoading()
 
-        this.$api.getNews(this.params).then(data => {
+        this.$api[this.apiKey](this.params).then(data => {
           uni.hideNavigationBarLoading()
           if (data == null) {
             return
