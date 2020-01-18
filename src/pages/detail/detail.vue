@@ -55,9 +55,9 @@
       // 获取文章详细信息
       getDetail(id) {
         this.$api.getNewsById(id).then(data => {
-          this.news = data.news
+          this.news = data.news || {}
           this.content = data.news.content
-          this.count = data.newsReportPo
+          this.count = data.newsReportPo || {}
         }).catch(err => {
           this.content = FAIL_CONTENT
         })
