@@ -1,6 +1,6 @@
 <template>
   <view id="recommend">
-    <news-list ref="news" meta-id="1906032244030001" />
+    <news-list ref="news" api-key="getNews" :api-params="{ metaId: '1906032244030001' }" />
   </view>
 </template>
 
