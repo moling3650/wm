@@ -2,7 +2,7 @@
   <view class="bg">
     <view class="history block">
       <subtitle>搜索历史</subtitle>
-      <history-list :listData="historyList" @query="query"></history-list>
+      <history-list :listData="searchHistoryList" @query="query"></history-list>
     </view>
 
     <view class="hot block">
@@ -41,15 +41,13 @@
           '音乐',
           '奇葩',
         ],
-        historyList: [
-          '搞笑',
-          '第一个项目',
-          '第一的塔',
-          '第一座城',
-          '第一人'
-        ],
         hotList: []
-        
+      }
+    },
+
+    computed: {
+      searchHistoryList() {
+        return this.$store.state.searchHistoryList
       }
     },
 
@@ -65,7 +63,7 @@
 
     // 点击导航栏搜索按钮
     onNavigationBarButtonTap(e) {
-      if(e.text === '搜索') {
+      if (e.text === '搜索') {
         this.query(this.keyword)
       }
     },
@@ -80,6 +78,7 @@
           })
           return
         }
+        this.$store.commit('ADD_SEARCH_HISTORY', keyword)
         uni.navigateTo({
           url: `/pages/search/searchResult?keyword=${keyword}`
         })
@@ -145,6 +144,7 @@
 
   .history,
   .hot {
+    min-height: 400rpx;
     padding: 40rpx 24rpx;
   }
 
