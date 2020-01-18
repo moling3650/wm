@@ -1,8 +1,9 @@
 <template>
   <view class="list">
     <view v-for="item in dataList" :key="item.id" class="list-item">
-      <news-item :item="item" @click="gotoDetail(item.id)" @praised="updateNews"></news-item>
+      <news-item :item="item" @click="gotoDetail(item.id)" @praised="updateNews(item)" />
     </view>
+    <view v-show="isEnd" class="tips fs14 color-default">{{ tips }}</view>
   </view>
 </template>
 
@@ -33,7 +34,9 @@
     data() {
       return {
         dataList: [],
-        pageIndex: 1
+        pageIndex: 1,
+        isEnd: false,
+        tips: '',
       }
     },
     computed: {
@@ -53,8 +56,12 @@
 
         this.$api[this.apiKey](this.params).then(data => {
           uni.hideNavigationBarLoading()
-          if (data == null) {
-            return
+          if (data.total === 0) {
+            this.isEnd = true
+            this.tips = '没有搜索到内容'
+          } else if (data.items.length === 0) {
+            this.isEnd = true
+            this.tips = '没有更多内容'
           } else if (pageIndex === 1) {
             uni.stopPullDownRefresh()
             this.dataList = data.items
@@ -71,12 +78,14 @@
 
       // 获取更多文章
       getMoreNews() {
-        this._fetchNews(this.pageIndex + 1)
+        if (!this.isEnd) {
+          this._fetchNews(this.pageIndex + 1)
+        }
       },
 
       // 点赞后更新文章状态
       updateNews(news) {
-
+        this.$set(news, 'praiseCount', news.praiseCount + 1)
       }
     }
   }
@@ -87,9 +96,13 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
+
     &-item {
       margin: 12rpx;
     }
-  }
 
+    .tips {
+      margin-top: 10rpx;
+    }
+  }
 </style>
