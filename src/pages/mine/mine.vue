@@ -1,99 +1,86 @@
 <template>
   <view class="center">
     <view class="hdq-header">
-      <view class="logo" @click="goLogin" :hover-class="!login ? 'logo-hover' : ''">
-        <image class="logo-img" :src="login ? uerInfo.avatarUrl :avatarUrl"></image>
+      <view class="logo">
+        <image class="logo-img" :src="user.avatarUrl || avatarUrl"></image>
         <view class="logo-title">
-          <text class="uer-name">Hi，{{login ? uerInfo.name : '您未登录'}}</text>
-          <text class="go-login navigat-arrow" v-if="!login">&#xe65e;</text>
+          <text class="uer-name">Hi，{{ user.name }}</text>
         </view>
       </view>
       <view class="nav">
-        <view class="nanigator-item" v-for="tab in nav" :key="tab.id" :class="{'active':navIndex === tab.id}" @click="_navBar(tab.id,tab.behavior)">
-          <text class="text">{{tab.text}}</text>
+        <view class="nanigator-item" v-for="tab in nav" :key="tab.key" :class="{'active': activedKey === tab.key}"
+          @click="tabChange(tab)">
+          <text class="text">{{ tab.text }}</text>
         </view>
       </view>
     </view>
     <view class="recomm-container list">
-      <view v-for="(item,index) in items" :key="index" class="list-item">
-        <list-view :options="item" @click="gotoDetail(item)" @someLove="someLove"></list-view>
-      </view>
+      <news-list ref="news" :api-key="apiKey" :api-params="{ targetType: 1 }" />
     </view>
   </view>
 </template>
 
 <script>
-  import listView from '@/components/listview.vue'
-  let pageIndex = 1;
+  import newsList from '@/components/newsList'
+
   export default {
+    name: 'Mine',
     components: {
-      listView
+      newsList
     },
     data() {
       return {
-        login: false,
         avatarUrl: '/static/logo.png',
-        uerInfo: {},
-        items: [],
-        navIndex: 1,
-        behavior: 'parise',
+        user: {},
+        activedKey: '',
         nav: [{
-            id: 1,
-            herf: '',
-            text: '赞过',
-            behavior: 'parise'
+            key: 'Praise',
+            text: '赞过'
           },
           {
-            id: 2,
-            herf: '',
-            text: '收藏',
-            behavior: 'collection'
+            key: 'Collection',
+            text: '收藏'
           },
           {
-            id: 3,
-            herf: '',
-            text: '转发',
-            behavior: 'forward'
+            key: 'Forward',
+            text: '转发'
           },
         ],
       }
     },
-    onLoad() {
-      this._navBar(this.navIndex, this.behavior)
+    computed: {
+      apiKey() {
+        return `query${this.activedKey}`
+      }
     },
-    methods: {
-      goLogin() {
-        if (!this.login) {
-          console.log('点击前往登录');
-        }
-      },
-      gotoDetail(items) {
+
+    onShow() {
+      console.log(this.$api)
+      this.$api.getEnumByNewsCategory()
+      this.getUserInfo().then(_ => {
+        this.tabChange(this.nav[0])
+      }).catch(_ => {
+        uni.clearStorageSync('token')
         uni.navigateTo({
-          url: '/pages/detail/detail?query=' + items.id
-        });
-      },
-      someLove(options) {
-        const parmes = {
-          id: options.id,
-          targetId: options.targetId,
-        }
-        let minus = -1;
-        this.$api.parise(parmes).then(res => {
-          options.status = minus
-          console.log(res, '----------------')
+          url: '/pages/logs/log'
+        })
+      })
+    },
+
+    methods: {
+      getUserInfo() {
+        return this.$api.getUserInfo().then(data => {
+          this.user = data
         })
       },
-      _navBar(id, behavior) {
-        this.navIndex = id;
-        const params = {
-          pageIndex: pageIndex,
-          pageSize: 20,
-          behaviorType: behavior
+
+      tabChange(tab) {
+        if (tab.key === this.activedKey) {
+          return
         }
-        this.$api.news(params).then(res => {
-          if (res.code === 200) {
-            this.items = res.data.items
-          }
+        this.activedKey = tab.key
+        this.$nextTick(() => {
+          this.$refs.news.getNews()
         })
       }
     }
