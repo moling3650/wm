@@ -1,14 +1,5 @@
 <template>
   <view class="bg">
-    <view class="header block">
-      <view class="left" @click="goback">
-        <text class="iconfont wm-iconleft fs20"></text>
-      </view>
-      <view class="search">
-        <input type="text" v-model="keyword" class="header-input">
-      </view>
-      <view class="right">搜索</view>
-    </view>
     <view class="history block">
       <subtitle>搜索历史</subtitle>
       <history-list :listData="historyList" @query="query"></history-list>
@@ -36,8 +27,8 @@
     },
     data() {
       return {
-        hotClass: '热门分类',
         keyword: '',
+        hotClass: '热门分类',
         tagList: [
           '娱乐',
           '体育',
@@ -57,18 +48,44 @@
           '第一座城',
           '第一人'
         ],
-        hotList: [],
+        hotList: []
+        
       }
     },
+
+    // 更新关键字
+    onNavigationBarSearchInputChanged(e) {
+      this.keyword = e.text
+    },
+
+    // 点击小键盘的搜索按钮
+    onNavigationBarSearchInputConfirmed() {
+      this.query(this.keyword)
+    },
+
+    // 点击导航栏搜索按钮
+    onNavigationBarButtonTap(e) {
+      if(e.text === '搜索') {
+        this.query(this.keyword)
+      }
+    },
+
     methods: {
-      query(name) {
-        this.keyword = name
+      // 搜索文章
+      query(keyword) {
+        if (!keyword) {
+          uni.showToast({
+            title: '请输入关键字搜索',
+            icon: 'none'
+          })
+          return
+        }
+        uni.navigateTo({
+          url: `/pages/search/searchResult?keyword=${keyword}`
+        })
       },
       tabChange(tag) {
         this.hotList = [0, 1, 2, 3, 4].map(i => `${tag}_${i}`)
-      },
-      goback() {
-        uni.navigateBack()
       }
     }
   }
