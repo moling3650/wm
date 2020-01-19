@@ -4,7 +4,12 @@
       <text class="comment-count color-default">评论（{{comments.length}}）</text>
       <view class="comments">
         <view v-for="c in comments" :key="c.id" class="comment">
-          <wm-comment :comment="c" @click.native="clickComment(c)" />
+          <wm-comment :comment="c" @click.native="clickComment(c)" @view-reply="fetchReplies" />
+          <view class="replies" v-if="c.replies">
+            <view v-for="reply in c.replies" :key="reply.id" class="reply">
+              <wm-comment :comment="reply" />
+            </view>
+          </view>
         </view>
       </view>
     </view>
@@ -58,6 +63,15 @@
           targetId: this.newsId
         }).then(data => {
           this.comments = data.items
+        })
+      },
+
+      fetchReplies(comment) {
+        this.$api.getRepliesByCommentId(comment.id, {
+          pageIndex: 1,
+          pageSize: 100
+        }).then(data => {
+          this.$set(comment, 'replies', data.items)
         })
       },
 
@@ -132,8 +146,13 @@
 
       .comment {
         border-bottom: 2rpx solid #E6E6E6;
+
         &:last-child {
           border: none;
+        }
+
+        .replies {
+          margin-left: 90rpx;
         }
       }
     }
