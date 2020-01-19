@@ -3,7 +3,9 @@
     <view class="body">
       <text class="comment-count color-default">评论（{{comments.length}}）</text>
       <view class="comments">
-        <wm-comment v-for="c in comments" :key="c.id" :comment="c" @click.native="clickComment(c)" />
+        <view v-for="c in comments" :key="c.id" class="comment">
+          <wm-comment :comment="c" @click.native="clickComment(c)" />
+        </view>
       </view>
     </view>
     <view class="footer">
@@ -127,6 +129,13 @@
         font-size: 12px;
         margin-bottom: 40rpx;
       }
+
+      .comment {
+        border-bottom: 2rpx solid #E6E6E6;
+        &:last-child {
+          border: none;
+        }
+      }
     }
 
     .footer {
@@ -147,7 +156,5 @@
         color: #333;
       }
     }
-
-
   }
 </style>
